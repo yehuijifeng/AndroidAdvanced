@@ -3,34 +3,56 @@ package com.lh.advanced.activity
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.lh.advanced.R
-import com.lh.component.Contants
+import com.lh.base.BaseActivity
+import com.lh.base.BaseFragment
+import com.lh.component.fragment.ComponentFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
 
+class MainActivity : BaseActivity() {
+    private var componentFragment: ComponentFragment? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        Toast.makeText(this, Contants.AAA, Toast.LENGTH_LONG).show()
+        nav_view.setNavigationItemSelectedListener { menuItem ->
+            menuItem.isChecked = true
+            drawerLayout.closeDrawers()
+            Toast.makeText(this, menuItem.title, Toast.LENGTH_LONG).show()
+            when (menuItem.itemId) {
+                R.id.nav_component -> {
+                    showFragment(ComponentFragment::class.java)
+                }
+            }
+            true
+        }
+    }
+
+    /**
+     * 显示目标framgent
+     */
+    private fun showFragment(clazz: Class<out BaseFragment>) {
+        when (clazz.canonicalName) {
+            ComponentFragment::class.java.canonicalName -> {
+                if (componentFragment == null) {
+                    componentFragment = ComponentFragment()
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.flContent, componentFragment!!)
+                        .commit()
+                } else {
+                    supportFragmentManager.beginTransaction()
+                        .show(componentFragment!!)
+                        .commit()
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
+
 
 }
