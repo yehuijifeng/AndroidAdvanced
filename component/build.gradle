@@ -1,0 +1,70 @@
+def conf = rootProject.ext
+def androidConf = conf.android
+def dependenciesConf = conf.dependencies
+if (conf.mainType == 1)
+    apply plugin: 'com.android.application'
+else
+    apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+android {
+    compileSdkVersion androidConf.compileSdkVersion
+    buildToolsVersion androidConf.buildToolsVersion
+
+    defaultConfig {
+        if (conf.mainType == 1)
+            applicationId "com.lh.component"
+        flavorDimensions androidConf.flavorDimensions
+        minSdkVersion androidConf.minSdkVersion
+        targetSdkVersion androidConf.targetSdkVersion
+        multiDexEnabled androidConf.multiDexEnabled
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    tasks.withType(JavaCompile) {
+        options.encoding = androidConf.encoding
+    }
+    //兼容java8
+    compileOptions {
+        sourceCompatibility androidConf.sourceCompatibility
+        targetCompatibility androidConf.targetCompatibility
+    }
+    //签名
+    signingConfigs {
+        config {
+            storeFile file(androidConf.storeFile)
+            storePassword androidConf.storePassword
+            keyAlias androidConf.keyAlias
+            keyPassword androidConf.keyPassword
+        }
+    }
+    //构建
+    buildTypes {
+        //调试
+        debug {
+            signingConfig signingConfigs.config
+            //显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            //java debug
+            debuggable true
+            //jni debug
+            jniDebuggable true
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "androidx.core:core-ktx:${dependenciesConf.core_ktx_version}"
+    implementation "androidx.appcompat:appcompat:${dependenciesConf.appcompat_version}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${dependenciesConf.lifecycle_extensions_version}"
+
+}

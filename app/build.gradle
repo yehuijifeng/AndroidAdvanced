@@ -1,0 +1,175 @@
+def conf = rootProject.ext
+def androidConf = conf.android
+def dependenciesConf = conf.dependencies
+if (conf.packageType == 0)
+    apply plugin: 'com.android.application'
+else
+    apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+android {
+    compileSdkVersion androidConf.compileSdkVersion
+    buildToolsVersion androidConf.buildToolsVersion
+
+    defaultConfig {
+        //统一资源维度
+        flavorDimensions androidConf.flavorDimensions
+        //敏捷开发
+        multiDexEnabled androidConf.multiDexEnabled
+        if (conf.packageType == 0)
+            applicationId dependenciesConf.applicationId
+        minSdkVersion androidConf.minSdkVersion
+        targetSdkVersion androidConf.targetSdkVersion
+        versionCode androidConf.versionCode
+        versionName androidConf.versionName
+        //ndk编译配置
+        ndk {
+            //指定编译module
+//            moduleName 'xxxx'
+            //设置支持的SO库架构
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'//, 'x86', 'x86_64'
+        }
+        //公共资源
+        manifestPlaceholders = [
+                //icon
+                icon     : dependenciesConf.icon,
+                roundIcon: dependenciesConf.roundIcon,
+        ]
+        //版本号
+        versionCode androidConf.versionCode
+        versionName dependenciesConf.versionName
+        //app名
+        resValue "string", "app_name", dependenciesConf.app_name
+        buildConfigField "String", "xxx_key", "\"${dependenciesConf.xxx_key}\""
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    //任务栏编辑编码格式
+    tasks.withType(JavaCompile) {
+        options.encoding = androidConf.encoding
+    }
+    //java编译版本
+    compileOptions {
+        sourceCompatibility androidConf.sourceCompatibility
+        targetCompatibility androidConf.targetCompatibility
+    }
+    //签名
+    signingConfigs {
+        config {
+            storeFile file(androidConf.storeFile)
+            storePassword androidConf.storePassword
+            keyAlias androidConf.keyAlias
+            keyPassword androidConf.keyPassword
+        }
+    }
+    //构建
+    buildTypes {
+        //调试
+        debug {
+            signingConfig signingConfigs.config
+            //显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            //java debug
+            debuggable true
+            //jni debug
+            jniDebuggable true
+        }
+        //发布
+        release {
+            signingConfig signingConfigs.config
+            //显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            //java debug
+            debuggable false
+            //jni debug
+            jniDebuggable false
+            //混淆
+            minifyEnabled false
+            //混淆文件
+            //proguard-android-optimize.txt代表系统默认的android程序的混淆文件，该文件已经包含了基本的混淆声明
+            //proguard-rules.pro是自己的定义混淆文件
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            //移除无用的resource文件
+            shrinkResources false
+            //Zipalign优化
+            zipAlignEnabled true
+            //拼接生成的包名
+            if (conf.packageType == 0) {
+                android.applicationVariants.all { variant ->
+                    variant.outputs.all {
+                        outputFileName = "${defaultConfig.versionName}_${productFlavors.name}.apk"
+                    }
+                }
+            }
+        }
+    }
+    //渠道包
+    productFlavors {
+        tencent {}
+        xiaomi { resValue "string", "app_name", dependenciesConf.app_name_xiaomi }
+        huawei { resValue "string", "app_name", dependenciesConf.app_name_huawei }
+        oppo {}
+        vivo {}
+        google {}
+        rests {}
+    }
+    //渠道包通用配置
+    productFlavors.all {
+        flavor ->
+            flavor.manifestPlaceholders = [
+                    channel_name: name,
+            ]
+    }
+    // 解决重复加载第三方那个jar包问题
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+//    sourceSets {
+//        main {
+//            def packageType = rootProject.ext.packageType
+//            def path
+//            if (packageType == 0) {
+//                path = "src/main/"
+//            } else if (packageType == 1) {
+//                path = "src/majiabao1/"
+//            } else {
+//                path = "src/main/"
+//            }
+//            manifest.srcFile path + "/AndroidManifest.xml"
+//            java.srcDirs = [path]
+//            res.srcDirs = [path]
+//            assets.srcDirs = [path]
+//        }
+//    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:${dependenciesConf.kotlin_stdlib_version}"
+    implementation "androidx.core:core-ktx:${dependenciesConf.core_ktx_version}"
+    implementation "androidx.appcompat:appcompat:${dependenciesConf.appcompat_version}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${dependenciesConf.lifecycle_extensions_version}"
+//    testImplementation "junit:junit:4.12"
+//    androidTestImplementation "androidx.test.ext:junit:1.1.2"
+//    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+    implementation project(':component')
+}

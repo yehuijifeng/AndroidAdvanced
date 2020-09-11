@@ -1,0 +1,60 @@
+ext {
+    mainType = 0 //主程序入口；0,默认app；1，component；
+    packageType = 0 // 马甲包类型；0，马甲包1；1，马甲包2；
+    android = [//通用配置
+               compileSdkVersion  : 30,
+               buildToolsVersion  : "30.0.2",
+               minSdkVersion      : 17,
+               targetSdkVersion   : 30,
+               versionCode        : 100,
+               versionName        : "1.0.0",
+               sourceCompatibility: JavaVersion.VERSION_1_8,
+               targetCompatibility: JavaVersion.VERSION_1_8,
+               encoding           : "UTF-8",
+               flavorDimensions   : "advanced",
+               multiDexEnabled    : true,
+               storeFile          : "../advanced.jks",
+               storePassword      : "lh19941223",
+               keyAlias           : "lh19941223",
+               keyPassword        : "lh19941223",
+    ]
+    //马甲包1
+    main = [
+            app_name         : "Advanced",
+            app_name_huawei  : "Advanced_Huawei",
+            app_name_xiaomi  : "Advanced_Xiaomi",
+            versionNamePrefix: "android",
+            applicationId    : "com.lh.advanced",
+            icon             : "@mipmap/ic_launcher_majiabao1",
+            roundIcon        : "@mipmap/ic_launcher_round_majiabao1",
+            xxx_key          : "123456qwer",
+    ]
+    //马甲包2
+    majiabao2 = [
+            app_name         : "Majiabao1",
+            app_name_huawei  : "Advanced_Huawei",
+            app_name_xiaomi  : "Advanced_Xiaomi",
+            versionNamePrefix: "advanced",
+            applicationId    : "com.lh.majiabao1",
+            icon             : "@mipmap/ic_launcher_majiabao2",
+            roundIcon        : "@mipmap/ic_launcher_round_majiabao2",
+            xxx_key          : "123456qwer",
+    ]
+    //区分马甲包
+    dependencies = [
+            appcompat_version           : "1.2.0",
+            runner_version              : "1.2.0",
+            design_version              : "28.0.0",
+            kotlin_stdlib_version       : "$kotlin_version",
+            core_ktx_version            : "1.3.1",
+            lifecycle_extensions_version: "2.2.0",
+            app_name                    : packageType == 0 ? "${main.app_name}" : "${majiabao2.app_name}",
+            app_name_huawei             : packageType == 0 ? "${main.app_name_huawei}" : "${majiabao2.app_name_huawei}",
+            app_name_xiaomi             : packageType == 0 ? "${main.app_name_xiaomi}" : "${majiabao2.app_name_xiaomi}",
+            applicationId               : packageType == 0 ? "${main.applicationId}" : "${majiabao2.applicationId}",
+            icon                        : packageType == 0 ? "${main.icon}" : "${majiabao2.icon}",
+            roundIcon                   : packageType == 0 ? "${main.roundIcon}" : "${majiabao2.roundIcon}",
+            versionName                 : (packageType == 0 ? "${main.versionNamePrefix}" : "${majiabao2.versionNamePrefix}") + "_V${android.versionName}",
+            xxx_key                     : packageType == 0 ? "${main.xxx_key}" : "${majiabao2.xxx_key}",
+    ]
+}

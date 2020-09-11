@@ -1,0 +1,11 @@
+<resources>
+    <string name="nav_header_title">Android高级开发</string>
+    <string name="nav_header_subtitle">Android移动架构</string>
+    <string name="nav_header_desc">导航头</string>
+    <string name="action_settings">设置</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_component">组件化</string>
+</resources>

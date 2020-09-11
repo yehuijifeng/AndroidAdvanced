@@ -1,0 +1,3 @@
+include ':component'
+include ':majiabao1'
+include ':app'
