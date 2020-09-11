@@ -1,3 +1,6 @@
+include ':router_core'
+include ':router_compiler'
+include ':router_annotation'
 include ':base'
 include ':component'
 include ':majiabao1'

@@ -28,6 +28,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    // java控制台输出中文乱码
     tasks.withType(JavaCompile) {
         options.encoding = androidConf.encoding
     }
@@ -69,4 +70,5 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${dependenciesConf.appcompat_version}"
     implementation "androidx.lifecycle:lifecycle-extensions:${dependenciesConf.lifecycle_extensions_version}"
     api project(":base")
+    implementation project(':router_annotation')
 }

@@ -43,7 +43,7 @@ android {
         buildConfigField "String", "xxx_key", "\"${dependenciesConf.xxx_key}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    //任务栏编辑编码格式
+    // java控制台输出中文乱码
     tasks.withType(JavaCompile) {
         options.encoding = androidConf.encoding
     }
