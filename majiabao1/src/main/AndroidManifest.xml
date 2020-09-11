@@ -2,46 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.lh.majiabao1">
-    <!--读sd卡-->
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:required="true" />
-    <!--写sd卡-->
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:required="true" />
-    <!--访问系统媒体文件-->
-    <uses-permission
-        android:name="android.permission.ACCESS_MEDIA_LOCATION"
-        android:required="true" />
-    <!--安装卸载文件系统-->
-    <uses-permission
-        android:name="android.permission.REQUEST_INSTALL_PACKAGES"
-        android:required="true" />
-    <!--联网-->
-    <uses-permission
-        android:name="android.permission.INTERNET"
-        android:required="true" />
-    <!--联网状态-->
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"
-        android:required="true" />
-    <!--改变网络状态-->
-    <uses-permission
-        android:name="android.permission.CHANGE_NETWORK_STATE"
-        android:required="true" />
-    <!--wifi状态-->
-    <uses-permission
-        android:name="android.permission.ACCESS_WIFI_STATE"
-        android:required="true" />
-    <!--改变WiFi状态-->
-    <uses-permission
-        android:name="android.permission.CHANGE_WIFI_STATE"
-        android:required="true" />
-    <!--相机-->
-    <uses-permission
-        android:name="android.permission.CAMERA"
-        android:required="true" />
     <application
         android:name=".app.App"
         android:allowBackup="true"

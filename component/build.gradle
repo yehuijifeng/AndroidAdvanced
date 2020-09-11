@@ -45,17 +45,19 @@ android {
             keyPassword androidConf.keyPassword
         }
     }
-    //构建
-    buildTypes {
-        //调试
-        debug {
-            signingConfig signingConfigs.config
-            //显示Log
-            buildConfigField "boolean", "LOG_DEBUG", "true"
-            //java debug
-            debuggable true
-            //jni debug
-            jniDebuggable true
+    if (conf.mainType == 1) {
+        //构建
+        buildTypes {
+            //调试
+            debug {
+                signingConfig signingConfigs.config
+                //显示Log
+                buildConfigField "boolean", "LOG_DEBUG", "true"
+                //java debug
+                debuggable true
+                //jni debug
+                jniDebuggable true
+            }
         }
     }
 }

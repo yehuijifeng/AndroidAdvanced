@@ -5,12 +5,12 @@
     <application
         android:theme="@style/AppTheme"
         tools:replace="theme">
-        <activity android:name=".activity.MainActivity">
+        <!--测试module的时候，作为程序入口使用，正是打包需要注释-->
+       <!-- <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity>-->
     </application>
 </manifest>
